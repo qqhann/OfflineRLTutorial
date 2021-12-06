@@ -37,7 +37,7 @@ if dataset_composition == "optimal":
     weights = sa_visitations
     weights = weights / np.sum(weights)
 elif dataset_composition == "random":
-    """A random disribution over states and actions"""
+    """A random distribution over states and actions"""
     weights = np.random.uniform(size=env.num_states * env.num_actions)
     weights = np.reshape(weights, (env.num_states, env.num_actions))
     weights = weights / np.sum(weights)
