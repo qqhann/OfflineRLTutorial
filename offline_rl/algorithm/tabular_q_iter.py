@@ -37,9 +37,10 @@ def q_iteration(env: GridEnv, num_itrs=100, render=False, **kwargs):
       num_itrs (int): Number of FQI iterations to run
       render (bool): If True, will plot q-values after each iteration
     """
+    # dS x dA
     q_values = np.zeros((env.num_states, env.num_actions))
     for _ in range(num_itrs):
         q_values = q_backup_sparse(env, q_values, **kwargs)
         if render:
             plot_sa_values(env, q_values, update=True, title="Q-values")
-    return q_values
+    return q_values  # dS x dA

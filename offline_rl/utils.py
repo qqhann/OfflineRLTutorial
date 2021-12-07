@@ -1,9 +1,10 @@
 import numpy as np
+from offline_rl.env import GridEnv
 
 # @title Utility Functions
 
 
-def compute_policy_deterministic(q_values, eps_greedy=0.0):
+def compute_policy_deterministic(q_values: np.ndarray, eps_greedy=0.0) -> np.ndarray:
     policy_probs = np.zeros_like(q_values)
     policy_probs[np.arange(policy_probs.shape[0]), np.argmax(q_values, axis=1)] = (
         1.0 - eps_greedy
@@ -12,7 +13,7 @@ def compute_policy_deterministic(q_values, eps_greedy=0.0):
     return policy_probs
 
 
-def compute_visitation(env, policy, discount=1.0, T=50):
+def compute_visitation(env: GridEnv, policy: np.ndarray, discount=1.0, T=50):
     dS = env.num_states
     dA = env.num_actions
     state_visitation = np.zeros((dS, 1))
@@ -21,10 +22,11 @@ def compute_visitation(env, policy, discount=1.0, T=50):
     t_matrix = env.transition_matrix()  # S x A x S
     sa_visit_t = np.zeros((dS, dA, T))
 
-    norm_factor = 0.0
+    norm_factor: float = 0.0
     for i in range(T):
+        # (dS, dA) <- (dS, 1) * (dS, dA)
         sa_visit = state_visitation * policy
-        cur_discount = discount ** i
+        cur_discount: float = discount ** i
         sa_visit_t[:, :, i] = cur_discount * sa_visit
         norm_factor += cur_discount
         # sum-out (SA)S
